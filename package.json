@@ -1,0 +1,23 @@
+{
+  "name": "ledger-rest-api",
+  "version": "1.0.0",
+  "description": "Ledger rest api created for Different",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/janitha000/ledger-rest-api.git"
+  },
+  "keywords": [
+    "ledger",
+    "different"
+  ],
+  "author": "Janitha Tennakoon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/janitha000/ledger-rest-api/issues"
+  },
+  "homepage": "https://github.com/janitha000/ledger-rest-api#readme"
+}
