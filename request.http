@@ -1,0 +1,5 @@
+
+
+
+
+GET http://localhost:5000/leases/ledger?start_date=2021-03-28T00:00:00.000Z&end_date=2021-05-27T00:00:00.000Z&frequency=WEEKLY&weekly_rent=555
