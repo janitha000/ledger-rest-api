@@ -18,19 +18,29 @@ This is a sample porject created as a quick way to see the ledger for a given le
 
 * Start the server using `npm run start` command. 
 
-### Consume API Endpoint
+## Consume API Endpoint
 
 There are 3 ways which the endpoint can be consumed.
 
-#### Using CURL 
+### Using CURL 
 
 `curl -X 'GET' \
   'http://localhost:5000/leases/ledger?start_date=2021-03-28T00%3A00%3A00.000Z&end_date=2021-04-10T00%3A00%3A00.000Z&frequency=FORTNIGHTLY&weekly_rent=555&timezone=Australia%2FSydney' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer {token}'`
 
+### Using Swagger UI
 
+Go to `http://localhost:5000/api-docs` in the browser.
 
+![picture alt](/misc/swagger.PNG "Swagger UI")
+
+### Using VS Code extension REST Client
+
+* Install REST Client extension in VS Code
+* Go to `request.http` file and consume the endpoint 
+
+![picture alt](/misc/rest-client.PNG "Swagger UI")
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
