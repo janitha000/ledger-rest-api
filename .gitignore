@@ -1,1 +1,4 @@
 node_modules/
+coverage/
+logs/api.complete.log
+logs/api.error.log
