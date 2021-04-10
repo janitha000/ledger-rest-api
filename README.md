@@ -11,9 +11,26 @@ This is a sample porject created as a quick way to see the ledger for a given le
 
 ## How to run the application
 
-In the project directory, you can run:
+* Add a token secret in the env file under TOKEN_SECRET
+* Since no endpoint created for user login generate a token using the token-generation script file. 
 
-### `npm start`
+`node token-generation.js`
+
+* Start the server using `npm run start` command. 
+
+### Consume API Endpoint
+
+There are 3 ways which the endpoint can be consumed.
+
+#### Using CURL 
+
+`curl -X 'GET' \
+  'http://localhost:5000/leases/ledger?start_date=2021-03-28T00%3A00%3A00.000Z&end_date=2021-04-10T00%3A00%3A00.000Z&frequency=FORTNIGHTLY&weekly_rent=555&timezone=Australia%2FSydney' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer {token}'`
+
+
+
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
