@@ -34,10 +34,11 @@ describe("Calculate Monthly Amount", () => {
     test("it should return correct monthly amount", () => {
         expect(leaseService.getMonthlyAmount(500)).toEqual(2172.62)
     })
-    // test("it should throw correct exception when weekly rent not provided", () => {
-    //     expect(leaseService.getMonthlyAmount()).toThrow()
-    //     expect(func).toThrowError('Weekly amount not provided')
-    // })
+    test("it should throw correct exception when weekly rent not provided", () => {
+        expect(() => leaseService.getMonthlyAmount()).toThrow()
+        expect(() => leaseService.getMonthlyAmount()).toThrow(HandledError)
+        expect(() => leaseService.getMonthlyAmount()).toThrow('Invalid weekly amount')
+    })
 });
 
 describe("Calculate Amount for Remaining Days", () => {

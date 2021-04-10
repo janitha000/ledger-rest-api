@@ -9,7 +9,7 @@ const { Frequency: F } = require('../../utils/constants')
 
 module.exports.getLeaseSchema = Joi.object({
     start_date: Joi.date().iso().required(),
-    end_date: Joi.date().iso().required(),
+    end_date: Joi.date().iso().min(Joi.ref('start_date')).required(),
     frequency: Joi.string().valid(F.WEEKLY, F.FORTNIGHTLY, F.MONTHLY).required(),
     weekly_rent: Joi.number().min(1).required(),
     timezone: Joi.string()

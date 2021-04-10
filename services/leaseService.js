@@ -1,7 +1,5 @@
 const moment = require('moment-timezone');
 const { Response_Messages: M } = require('../utils/constants')
-
-
 const { Frequency: F } = require('../utils/constants');
 const { HandledError } = require('../utils/errorUtil');
 const logger = require('../utils/logger');
@@ -10,48 +8,22 @@ class LeaseService {
 
     constructor(timeZone = "") {
         moment.tz.setDefault(timeZone)
-        // moment().tz(timeZone).format();
-        // console.log(moment().timeZone)
-
-        var a = moment("2013-11-18 11:55")
-
     }
 
     generateLease = (startDate, endDate, frequency, weeklyRent) => {
+        let lineItems = [];
         const accumalatorObj = this.getAccumalatorObj(frequency);
-
-
         logger.info('Accumaltor object created')
-        let result = this.generateLeaseLineItems(startDate, endDate, weeklyRent, accumalatorObj)
+
+        lineItems = this.generateLeaseLineItems(startDate, endDate, weeklyRent, accumalatorObj)
 
         logger.info("Formatting line items dates and amounts")
-        result = result.map(({ startDate, endDate, amount }) => ({ startDate: this.formatTimeToISOString(startDate), endDate: this.formatTimeToISOString(endDate), amount }))
-        return result;
-    }
-
-    getAccumalatorObj = (frequency) => {
-        let accumalatorObj = {}
-
-        switch (frequency) {
-            case F.WEEKLY:
-                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 1 }
-                break;
-            case F.FORTNIGHTLY:
-                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 2 }
-                break;
-            case F.MONTHLY:
-                accumalatorObj = { accumalatorType: 'month', accumalotorValue: 1 }
-                break;
-            default:
-                break;
-
-        }
-
-        return accumalatorObj
+        lineItems = lineItems.map(({ startDate, endDate, amount }) => ({ startDate: this.formatTimeToISOString(startDate), endDate: this.formatTimeToISOString(endDate), amount }))
+        return lineItems;
     }
 
     generateLeaseLineItems = (mainStartDate, mainEndDate, weeklyRent, accumalatorObj) => {
-        let results = []
+        let lineItems = []
         const { accumalatorType, accumalotorValue } = accumalatorObj;
 
         if (!(accumalatorType && accumalotorValue)) {
@@ -74,16 +46,38 @@ class LeaseService {
             if (endDate.isAfter(mainEndDate)) {
                 logger.info("Adding line item for remainder of days")
                 let item = this.getLeaseValueForRemainingDays(startDate, moment(mainEndDate), weeklyRent)
-                results.push(item);
+                lineItems.push(item);
                 break;
             }
-            results.push({ startDate, endDate, amount })
+            lineItems.push({ startDate, endDate, amount })
         }
-        logger.info(`Line items results generated with length of ${results.length}`)
+        logger.info(`Line items results generated with length of ${lineItems.length}`)
 
-        return results;
-
+        return lineItems;
     }
+
+
+    getAccumalatorObj = (frequency) => {
+        let accumalatorObj = {}
+
+        switch (frequency) {
+            case F.WEEKLY:
+                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 1 }
+                break;
+            case F.FORTNIGHTLY:
+                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 2 }
+                break;
+            case F.MONTHLY:
+                accumalatorObj = { accumalatorType: 'month', accumalotorValue: 1 }
+                break;
+            default:
+                break;
+
+        }
+
+        return accumalatorObj
+    }
+
 
     getAmountValue = (weeklyRent, accumalatorObj) => {
         if (weeklyRent > 0) {
@@ -110,20 +104,18 @@ class LeaseService {
     }
 
     getMonthlyAmount = (weeklyAmount) => {
-        // if (!weeklyAmount)
-        //     throw new Error('Weekly amount not provided')
+        if (!weeklyAmount || weeklyAmount < 0)
+            throw new HandledError('Invalid weekly amount', M.ERROR_GET_LEDGER)
         let amount = (weeklyAmount / 7) * 365 / 12;
         return this.formatAmountToTwoDecimals(amount)
     }
 
     formatTimeToISOString = (momentTime) => {
-        if (momentTime)
-            return momentTime.toISOString();
+        return momentTime.toISOString();
     }
 
     formatAmountToTwoDecimals = (amount) => {
-        if (amount)
-            return Math.round(amount * 100) / 100
+        return Math.round(amount * 100) / 100
     }
 
 }

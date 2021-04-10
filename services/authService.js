@@ -9,7 +9,6 @@ module.exports.generateToken = (user) => {
 
 module.exports.verifyToken = () => {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user => {
-        console.log(err)
 
         if (err) return res.sendStatus(403)
 

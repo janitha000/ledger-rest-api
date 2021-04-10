@@ -1,0 +1,150 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Different Lease API",
+        "description": "Lease API to return leadger values",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Swagger API Team"
+        },
+        "license": {
+            "name": "MIT"
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/leases/ledger": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Returns a list of line items.",
+                "operationId": "findPets",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Start date of the ledger - provided in ISO String",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "The end date of the ledger - provided in ISO String",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "frequency",
+                        "in": "query",
+                        "description": "Payment frequency of the ledger",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "weekly_rent",
+                        "in": "query",
+                        "description": "The end date of the ledger - provided in ISO String",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "timezone",
+                        "in": "query",
+                        "description": "The timezone of the property",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Line items response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "reference": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/LineItems"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "LineItems": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/LineItem"
+                }
+            ]
+        },
+        "LineItem": {
+            "type": "object",
+            "properties": {
+                "startDate": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorModel": {
+            "type": "object",
+            "properties": {
+                "reference": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

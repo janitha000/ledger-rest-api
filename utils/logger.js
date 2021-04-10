@@ -21,12 +21,12 @@ const logger = createLogger({
 });
 
 
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
 
-    logger.add(new transports.Console({
+//     logger.add(new transports.Console({
 
-    }));
-}
+//     }));
+// }
 
 
 module.exports = logger;
