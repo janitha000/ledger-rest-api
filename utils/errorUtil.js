@@ -9,18 +9,14 @@ class GeneralError extends Error {
     }
 
     getCode() {
-        if (this instanceof BadRequest) {
-            return 400;
-        } if (this instanceof NotFound) {
+        if (this instanceof NotFound) {
             return 404;
         }
         return 500;
     }
 
     getReference() {
-        if (this instanceof BadRequest) {
-            return R.BAD_REQUEST;
-        } if (this instanceof NotFound) {
+        if (this instanceof NotFound) {
             return R.NOT_FOUND;
         }
         if (this instanceof HandledError) {
@@ -30,13 +26,11 @@ class GeneralError extends Error {
     }
 }
 
-class BadRequest extends GeneralError { }
 class NotFound extends GeneralError { }
 class HandledError extends GeneralError { }
 
 module.exports = {
     GeneralError,
-    BadRequest,
     NotFound,
     HandledError
 };

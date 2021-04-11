@@ -18,7 +18,7 @@ class LeaseService {
         lineItems = this.generateLeaseLineItems(startDate, endDate, weeklyRent, accumalatorObj)
 
         logger.info("Formatting line items dates and amounts")
-        lineItems = lineItems.map(({ startDate, endDate, amount }) => ({ startDate: this.formatTimeToISOString(startDate), endDate: this.formatTimeToISOString(endDate), amount }))
+        lineItems = lineItems.map(({ startDate, endDate, amount }) => ({ startDate: this.formatTimeToISOString(startDate), endDate: this.formatTimeToISOString(endDate), amount: parseFloat(amount) }))
         return lineItems;
     }
 
@@ -38,10 +38,19 @@ class LeaseService {
         }
 
         logger.info('Standard amount calculated')
+        const isEndOfMonth = (accumalatorType !== 'M') ? false : moment(mainStartDate, 'YYYY-MM-DD').isSame(moment(mainStartDate).endOf('M').format('YYYY-MM-DD'))
         for (let m = moment(mainStartDate); m.isBefore(mainEndDate); m.add(accumalotorValue, accumalatorType)) {
+            let startDate;
+            let endDate;
 
-            let startDate = moment(m);
-            let endDate = moment(startDate).add(accumalotorValue, accumalatorType).subtract(1, 'day')
+            if (isEndOfMonth) {
+                startDate = moment(m).endOf('M');
+                endDate = moment(startDate).add(accumalotorValue, accumalatorType).endOf('M')
+            } else {
+                startDate = moment(m);
+                endDate = moment(startDate).add(accumalotorValue, accumalatorType).subtract(1, 'day')
+            }
+
 
             if (endDate.isAfter(mainEndDate)) {
                 logger.info("Adding line item for remainder of days")
@@ -51,24 +60,48 @@ class LeaseService {
             }
             lineItems.push({ startDate, endDate, amount })
         }
+
+
+
+
         logger.info(`Line items results generated with length of ${lineItems.length}`)
 
         return lineItems;
     }
 
+    monthSpecial = (mainStartDate, mainEndDate, weeklyRent, accumalatorObj, amount) => {
+        const { accumalatorType, accumalotorValue } = accumalatorObj;
+        let lineItems = [];
+
+        for (let m = moment(mainStartDate); m.isBefore(mainEndDate); m.add(accumalotorValue, accumalatorType)) {
+
+            let startDate = moment(m).endOf('M');
+            let endDate = moment(startDate).add(accumalotorValue, accumalatorType).endOf('M')
+
+            if (endDate.isAfter(mainEndDate)) {
+                logger.info("Adding line item for remainder of days")
+                let item = this.getLeaseValueForRemainingDays(startDate, moment(mainEndDate), weeklyRent)
+                lineItems.push(item);
+                break;
+            }
+            lineItems.push({ startDate, endDate, amount })
+        }
+
+        return lineItems;
+    }
 
     getAccumalatorObj = (frequency) => {
         let accumalatorObj = {}
 
         switch (frequency) {
             case F.WEEKLY:
-                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 1 }
+                accumalatorObj = { accumalatorType: 'W', accumalotorValue: 1 }
                 break;
             case F.FORTNIGHTLY:
-                accumalatorObj = { accumalatorType: 'week', accumalotorValue: 2 }
+                accumalatorObj = { accumalatorType: 'W', accumalotorValue: 2 }
                 break;
             case F.MONTHLY:
-                accumalatorObj = { accumalatorType: 'month', accumalotorValue: 1 }
+                accumalatorObj = { accumalatorType: 'M', accumalotorValue: 1 }
                 break;
             default:
                 break;
@@ -83,9 +116,9 @@ class LeaseService {
         if (weeklyRent > 0) {
             const { accumalatorType, accumalotorValue } = accumalatorObj;
 
-            const amount = (accumalatorType === "month") ? this.getMonthlyAmount(weeklyRent) :
-                (accumalatorType === "week" && accumalotorValue === 2) ? weeklyRent * 2 :
-                    (accumalatorType === "week" && accumalotorValue === 1) ? weeklyRent : null
+            const amount = (accumalatorType === "M") ? this.getMonthlyAmount(weeklyRent) :
+                (accumalatorType === "W" && accumalotorValue === 2) ? weeklyRent * 2 :
+                    (accumalatorType === "W" && accumalotorValue === 1) ? weeklyRent : null
 
             return amount;
         }

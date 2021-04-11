@@ -1,8 +1,10 @@
-const { app } = require('../index');
+const { app } = require('../server');
 const request = require('supertest');
 const { Response_References: R, Response_Messages: M } = require('../utils/constants')
 const { getLedger } = require('../controllers/leaseController')
 const sinon = require("sinon");
+const LeaseService = require('../services/leaseService')
+const leaseService = new LeaseService();
 
 const { generateToken } = require('../token-generation')
 
@@ -16,7 +18,7 @@ beforeAll(() => {
         weekly_rent: 555,
         timezone: "a"
     }
-    sinon.spy(getLedger);
+
 });
 
 describe("Get leder line items", () => {
@@ -37,6 +39,16 @@ describe("Get leder line items", () => {
             ])
         )
     })
+    // test("Should handle unhandled exceptions", async () => {
+    //     sinon.stub(leaseService, "generateLease").throws()
+    //     const res = await request(app)
+    //         .get('/leases/ledger')
+    //         .set('Authorization', 'Bearer ' + token)
+    //         .query(queryParams)
+    //     console.log(res.body)
+    //     expect(res.status).toBe(500);
+    //     expect(res.body.reference).toEqual(R.SUCCESS);
+    // })
 })
 
 describe("JWT Token Authentication", () => {

@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
             return res.status(401).send(prepareErrorResponse(R.UNAUTHORIZED, M.INVALID_ACCESS_TOKEN));
         }
 
-        req.user = user
+        req.user = user //Can be used for Auhtorization
         next()
     })
 }

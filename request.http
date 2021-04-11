@@ -1,6 +1,14 @@
 
 
+GET http://localhost:5000/leases/ledger?start_date=2021-03-28T12:00:00.000Z&end_date=2021-05-27T16:00:00.000Z&frequency=FORTNIGHTLY&weekly_rent=555&timezone=Australia/Sydney
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJpZ2h0cyI6WyJhZG1pbiJdLCJpYXQiOjE2MTgxMDE0MTEsImV4cCI6MTYxODEwMzIxMX0.sO4epk1PYZaEWgqD3mXANiBzod9fRB5Gb6EzQeW7jrg
 
 
-GET http://localhost:5000/leases/ledger?start_date=2021-03-28T00:00:00.000Z&end_date=2021-05-27T00:00:00.000Z&frequency=WEEKLY&weekly_rent=555
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJpZ2h0cyI6WyJhZG1pbiJdLCJpYXQiOjE2M=TgwNTA4NDcsImV4cCI6MTYxODA1MjY0N30.Ainyt2T5yvD7_oSDJcRwAldXXmbIocjGbJisyHlUkPc
+
+
+###
+GET http://localhost:5000/leases/ledger?start_date=2020-03-28T13:00:00.000Z&end_date=2020-05-27T16:00:00.000Z&frequency=FORTNIGHTLY&weekly_rent=555&timezone=Asia/Singapore
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJpZ2h0cyI6WyJhZG1pbiJdLCJpYXQiOjE2MTgwNzExMjAsImV4cCI6MTYxODA3MjkyMH0.uixTeGIo_Iq6FmBqxsB5dx_5zVzmTlUYZk8asBM5M7w
+
+
+

@@ -4,9 +4,14 @@ This is a sample porject created as a quick way to see the ledger for a given le
 
 ## Assumptions
 * To access the endpoint a user should be a authenticated user. Authorization is not needed for the endpoint. 
-    * Authentication - is implemented for the endpoint. But token generation (mainly through a /signin endpoint is not implemented)
-    * Authorization - is not implemented but the rights are passed through the JWT token if it is required in future. 
+    * Authentication - is implemented for the endpoint. But token generation (should be through a /signin endpoint is not implemented)
+    * Authorization - is not implemented but the user rights are passed through the JWT token if it is required in future. 
 * All query parameters are mandotory.
+* start_date, end_date parameters is following simplified extended ISO format (ISO 8601) format and it will be in the same timezone provided in timezone parameter.
+* The response will also be in ISO format which will be mapped to client provided timezone.
+* Monthly calculation
+    * If the start date is on the last day of a month, the next payment day will be always at the end of the month.
+    * If not, the next payment day will be the exact same day in the next month (no fixed 30 days count is allocated. Calculation will be done using dynamic number of days in different months)
 
 
 ## How to run the application
@@ -17,6 +22,8 @@ This is a sample porject created as a quick way to see the ledger for a given le
 `node token-generation.js`
 
 * Start the server using `npm run start` command. 
+
+Server will start listening on port 5000.
 
 ## Consume API Endpoint
 
@@ -42,63 +49,14 @@ Go to `http://localhost:5000/api-docs` in the browser.
 
 ![picture alt](/misc/rest-client.PNG "Swagger UI")
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Run tests
 
-### `npm test`
+Two types of tests are available under tests folder.
+* Unit tests on legder service
+* Integration tests on the end point
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To run the whole test suite issue `npm run test`.
+To only run unit tests issue `npm run test-unit`
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To get test coverage issue `npm run test-coverage` 
