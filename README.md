@@ -27,6 +27,13 @@ Server will start listening on port 5000.
 
 ## Consume API Endpoint
 
+The API endpoint is available as `http://localhost:5000/leases/ledger` with following mandotory query parameters.
+* start_date
+* end_date
+* frequency
+* weekly_rent
+* timezone
+
 There are 3 ways which the endpoint can be consumed.
 
 ### Using CURL 

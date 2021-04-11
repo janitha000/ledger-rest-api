@@ -16,9 +16,8 @@ beforeAll(() => {
         end_date: '2021-05-27T00:00:00.000Z',
         frequency: 'FORTNIGHTLY',
         weekly_rent: 555,
-        timezone: "a"
+        timezone: "Asia/Singapore"
     }
-
 });
 
 describe("Get leder line items", () => {
@@ -138,7 +137,7 @@ describe("Get Ledger Request parameter validation", () => {
         expect(res.body.reference).toEqual(R.BAD_REQUEST);
         expect(res.body.data.error).toEqual("\"frequency\" must be one of [WEEKLY, FORTNIGHTLY, MONTHLY]");
     })
-    test("weekly ren should be valid category", async () => {
+    test("weekly rent should be valid amount", async () => {
         let weekly_rent = -100;
         const res = await request(app)
             .get('/leases/ledger')
@@ -147,5 +146,25 @@ describe("Get Ledger Request parameter validation", () => {
         expect(res.status).toBe(400);
         expect(res.body.reference).toEqual(R.BAD_REQUEST);
         expect(res.body.data.error).toEqual("\"weekly_rent\" must be greater than or equal to 1");
+    })
+    test("time zone should be not null", async () => {
+        let { timezone, ...rest } = queryParams
+        const res = await request(app)
+            .get('/leases/ledger')
+            .set('Authorization', 'Bearer ' + token)
+            .query(rest)
+        expect(res.status).toBe(400);
+        expect(res.body.reference).toEqual(R.BAD_REQUEST);
+        expect(res.body.data.error).toEqual("\"timezone\" is required");
+    })
+    test("timezone should be a valid timezone", async () => {
+        let timezone = -"A/B";
+        const res = await request(app)
+            .get('/leases/ledger')
+            .set('Authorization', 'Bearer ' + token)
+            .query({ ...queryParams, timezone })
+        expect(res.status).toBe(400);
+        expect(res.body.reference).toEqual(R.BAD_REQUEST);
+        expect(res.body.data.error).toEqual("The provided time zone is invalid.");
     })
 })
