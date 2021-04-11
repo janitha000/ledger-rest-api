@@ -61,32 +61,7 @@ class LeaseService {
             lineItems.push({ startDate, endDate, amount })
         }
 
-
-
-
         logger.info(`Line items results generated with length of ${lineItems.length}`)
-
-        return lineItems;
-    }
-
-    monthSpecial = (mainStartDate, mainEndDate, weeklyRent, accumalatorObj, amount) => {
-        const { accumalatorType, accumalotorValue } = accumalatorObj;
-        let lineItems = [];
-
-        for (let m = moment(mainStartDate); m.isBefore(mainEndDate); m.add(accumalotorValue, accumalatorType)) {
-
-            let startDate = moment(m).endOf('M');
-            let endDate = moment(startDate).add(accumalotorValue, accumalatorType).endOf('M')
-
-            if (endDate.isAfter(mainEndDate)) {
-                logger.info("Adding line item for remainder of days")
-                let item = this.getLeaseValueForRemainingDays(startDate, moment(mainEndDate), weeklyRent)
-                lineItems.push(item);
-                break;
-            }
-            lineItems.push({ startDate, endDate, amount })
-        }
-
         return lineItems;
     }
 

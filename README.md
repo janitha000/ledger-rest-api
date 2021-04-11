@@ -16,7 +16,7 @@ This is a sample porject created as a quick way to see the ledger for a given le
 
 ## How to run the application
 
-* Add a token secret in the env file under TOKEN_SECRET
+* Change the  token secret in the env file under TOKEN_SECRET (OPTIONAL)
 * Since no endpoint created for user login generate a token using the token-generation script file. 
 
 `node token-generation.js`
